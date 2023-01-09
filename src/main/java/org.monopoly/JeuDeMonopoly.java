@@ -6,7 +6,7 @@ import java.util.Collections;
 public class JeuDeMonopoly {
 
     private final ArrayList<Joueur> joueurs = new ArrayList<>();
-    private final Combinaison combinaison;
+    private final Gobelet gobelet;
     private boolean stop = false;
     private ArrayList<CaseConstructible> caseLibreAAchat = new ArrayList<>();
     private Plateau plateau ;
@@ -20,7 +20,7 @@ public class JeuDeMonopoly {
         joueurs.add(new Joueur("Loubna","Elle", plateau.depart));
         joueurs.add(new Joueur("Mathieu","Il", plateau.depart));
         joueurs.add(new Joueur("Cedric","Il", plateau.depart));
-        combinaison = new Combinaison();
+        gobelet = new Gobelet();
         caseLibreAAchat=  new ArrayList<>(plateau.getCaseAchetable());
     }
 
@@ -38,9 +38,8 @@ public class JeuDeMonopoly {
 
     private void jouerUnTour(Joueur unjoueur) {
         if (!stop) { //verifier avant le joueur suivant si la partie est arrete
-            int[] valeurLancer = unjoueur.lancer();
-            int total = combinaison.faitLaSomme(valeurLancer);
-            boolean verifdouble = combinaison.estUnDouble(valeurLancer);
+            int total = gobelet.lancer();
+            boolean verifdouble = gobelet.estUnDouble();
             unjoueur.monLance(total);  // plus logique de l'afficher avant son eventuel deplacement, achat ou paiment de loyer, prison j'ai donc decomposé mon ousuisje initial
     // SI DOUBLE
             if (verifdouble) {

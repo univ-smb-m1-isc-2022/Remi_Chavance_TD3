@@ -3,8 +3,6 @@ package org.monopoly;
 import java.util.ArrayList;
 
 public class Joueur implements Comparable {
-
-    private final De[] des;
     private final String nom;
     private final String sexe;
     private int argent;
@@ -28,7 +26,6 @@ public class Joueur implements Comparable {
     private ArrayList<CaseConstructible> casespossedes= new ArrayList<>()   ;    // contient la liste des propriété possedes
 
     public Joueur(String nom, String sexe, Case position) {
-        des = new De[2];
         this.nom = nom;
         this.sexe= sexe;
         argent = 400;
@@ -50,8 +47,6 @@ public class Joueur implements Comparable {
         g=0;
         gare=0;
         casespossedes= new ArrayList<CaseConstructible>();
-        des[0] = new De();
-        des[1] = new De();
     }
 
     public boolean getLiberable() {
@@ -83,15 +78,6 @@ public class Joueur implements Comparable {
 
     public boolean finDePartie() { // condition de fin de partie
         return tour == 100 || argent < 0;
-    }
-
-    public int[] lancer() {  // le joueur lance les 2 et recupere un tableau de valeur
-        int[] valeurlancer = new int[2];
-        for (int i = 0; i < des.length; i++) {
-            des[0].lancer();
-            valeurlancer[i] = des[0].getValeur();
-        }
-        return valeurlancer;
     }
 
     public void ouSuisJe() {
