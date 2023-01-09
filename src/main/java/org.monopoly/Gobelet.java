@@ -9,6 +9,11 @@ public class Gobelet {
         de2 = new De();
     }
 
+    public Gobelet(De de1, De de2) {
+        this.de1 = de1;
+        this.de2 = de2;
+    }
+
     public int lancer() {
         de1.lancer();
         de2.lancer();
