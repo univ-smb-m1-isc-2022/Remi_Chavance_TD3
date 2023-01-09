@@ -1,4 +1,4 @@
-package net.guillaume.teaching.refactoring.monopoly;
+package org.monopoly;
 
 public class Combinaison {
 
