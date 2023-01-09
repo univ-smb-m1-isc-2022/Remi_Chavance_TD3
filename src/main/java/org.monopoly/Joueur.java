@@ -81,18 +81,12 @@ public class Joueur implements Comparable {
     }
 
     public void ouSuisJe() {
-        if(argent >0){
-        System.out.println("Sa position est " + position.getName() + ", son argent est : " + argent + ".");
-    }
-    else {
-            System.out.println("Sa position est " + position.getName() + ". " +getSexeJ() +" n'a plus d'argent.");
+        if(argent > 0) {
+            System.out.println("Sa position est " + position.getName() + ", son argent est : " + argent + ".");
+        } else {
+            System.out.println("Sa position est " + position.getName() + ". " + getSexeJ() + " n'a plus d'argent.");
         }
 
-    }
-
-
-    public void monLance(int total) {
-        System.out.println( nom + " fait un total pour son lancer de des de " + total +".");
     }
 
     public void aFaitUnDouble(Case prison) {

@@ -28,63 +28,70 @@ public class JeuDeMonopoly {
     public void jouerUnePartie() {
         while (!stop) {
             for (Joueur joueur : joueurs) {
-                jouerUnTour(joueur);
-                liberer(joueur);
+                this.jouerUnTour(joueur);
+                this.liberer(joueur);
             }
         }
-        afficheFinDePartie();
+        this.afficheFinDePartie();
     }
 
 
-    private void jouerUnTour(Joueur unjoueur) {
-        if (!stop) { //verifier avant le joueur suivant si la partie est arrete
-            int total = gobelet.lancer();
-            boolean verifdouble = gobelet.estUnDouble();
-            unjoueur.monLance(total);  // plus logique de l'afficher avant son eventuel deplacement, achat ou paiment de loyer, prison j'ai donc decomposé mon ousuisje initial
-    // SI DOUBLE
-            if (verifdouble) {
-                unjoueur.aFaitUnDouble(plateau.prison);  // incremente double met rejouer a true, le met en prison , condition liberable
-                if (!unjoueur.estEnPrison()) {        // si pas ne prison ->  jouer  son resultat
-                    jouerLeTotalDe(unjoueur, total);
-                    unjoueur.ouSuisJe();
-                }
-                if (unjoueur.rejoue())    // Si  il a un double il va rejouer  condition nece car appel recursif
-                {
-                    System.out.println(unjoueur.getNomJ() +" rejoue.");
-                    unjoueur.uneFoisCaSuffis();    // on remet a false son droit de rejouer  car appel recursif
-                    jouerUnTour(unjoueur);  // il joue un autre tour
-                }
-                if (unjoueur.getLiberable()) {   // libere le joueur en prison qui a fait un double
-                    unjoueur.liberationDouble();
-                    jouerLeTotalDe(unjoueur, total);
-                    unjoueur.ouSuisJe();
-                }
+    private void jouerUnTour(Joueur joueur) {
+        //verifier avant le joueur suivant si la partie est arrete
+        if (stop) return;
+
+
+        int total = gobelet.lancer();
+        System.out.println( joueur.getNomJ() + " fait un total pour son lancer de des de " + total +".");
+
+        // si le résultat n'est pas un double
+        if (!gobelet.estUnDouble()) {
+
+            joueur.aPasFaitUnDouble();   // donc on remet compteur double à 0
+            if (!joueur.estEnPrison()) {
+                jouerLeTotalDe(joueur, total);   // il joue son resultat
             }
-    // SI PAS DOUBLE
-            else {
-                unjoueur.aPasFaitUnDouble();   // donc on remet compteur double à 0
-                if (!unjoueur.estEnPrison()) {
-                    jouerLeTotalDe(unjoueur, total);   // il joue son resultat
-                }
-                unjoueur.ouSuisJe();
+            joueur.ouSuisJe();
+
+        }
+        else // si le resultat est un double
+        {
+            joueur.aFaitUnDouble(plateau.prison);  // incremente double met rejouer a true, le met en prison , condition liberable
+
+            if (!joueur.estEnPrison()) {        // si pas ne prison ->  jouer  son resultat
+                jouerLeTotalDe(joueur, total);
+                joueur.ouSuisJe();
+            }
+
+            if (joueur.rejoue())    // Si  il a un double il va rejouer  condition nece car appel recursif
+            {
+                System.out.println(joueur.getNomJ() +" rejoue.");
+                joueur.uneFoisCaSuffis();    // on remet a false son droit de rejouer  car appel recursif
+                jouerUnTour(joueur);  // il joue un autre tour
+            }
+
+            if (joueur.getLiberable()) {   // libere le joueur en prison qui a fait un double
+                joueur.liberationDouble();
+                jouerLeTotalDe(joueur, total);
+                joueur.ouSuisJe();
             }
         }
     }
 
     private void liberer(Joueur unjoueur) {
-        if (unjoueur.estEnPrison())  // verifier si il est prison
-        {
-            unjoueur.liberationEnVue();   //   incrementer le nombre de tour et si 3 le liberer
+        // verifier si il est prison
+        if (unjoueur.estEnPrison()) {
+            unjoueur.liberationEnVue(); // incrementer le nombre de tour et si 3 le liberer
         }
     }
 
-    private void jouerLeTotalDe(Joueur unjoueur, int total) {
-        unjoueur.joue(total, plateau.depart, plateau.impot, plateau.luxe, plateau.allerenprison, plateau.prison);   // tester si cas construtible
-        if(unjoueur.getPosition() instanceof  CaseConstructible) {
-        unjoueur.acheterCase((CaseConstructible) unjoueur.getPosition(),caseLibreAAchat);
-        unjoueur.payerLoyer((CaseConstructible) unjoueur.getPosition(),caseLibreAAchat, joueurs);
+    private void jouerLeTotalDe(Joueur joueur, int total) {
+        joueur.joue(total, plateau.depart, plateau.impot, plateau.luxe, plateau.allerenprison, plateau.prison);   // tester si cas construtible
+        if (joueur.getPosition() instanceof  CaseConstructible) {
+            joueur.acheterCase((CaseConstructible) joueur.getPosition(), caseLibreAAchat);
+            joueur.payerLoyer((CaseConstructible) joueur.getPosition(), caseLibreAAchat, joueurs);
         }
-        stop = unjoueur.finDePartie();
+        stop = joueur.finDePartie();
         // avancer sur le plateau et faire action
 
     }
@@ -110,9 +117,4 @@ public class JeuDeMonopoly {
         Collections.sort(joueurs);
         Collections.sort(joueurs, Collections.reverseOrder());
     }
-
-
-
-
 }
-
